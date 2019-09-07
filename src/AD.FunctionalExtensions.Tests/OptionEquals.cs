@@ -1,16 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace AD.FunctionalExtensions.Tests
 {
     [TestClass]
     public class OptionEquals
     {
-        readonly Random rnd = new Random();
+        static readonly Random rnd = new Random();
 
         [TestMethod]
-        public void Int()
+        public void Equal()
         {
             var value = rnd.Next();
             var a = Option.Some(value);
@@ -20,7 +19,7 @@ namespace AD.FunctionalExtensions.Tests
         }
 
         [TestMethod]
-        public void Int_NotEqual()
+        public void NotEqual()
         {
             var value = rnd.Next();
             var a = Option.Some(value);
@@ -33,7 +32,7 @@ namespace AD.FunctionalExtensions.Tests
         }
 
         [TestMethod]
-        public void Int_FirstNone()
+        public void FirstNone()
         {
             var a = Option<int>.None;
             var b = Option.Some(rnd.Next());
@@ -42,7 +41,7 @@ namespace AD.FunctionalExtensions.Tests
         }
 
         [TestMethod]
-        public void Int_SecondNone()
+        public void SecondNone()
         {
             var a = Option.Some(rnd.Next());
             var b = Option<int>.None;
@@ -51,12 +50,26 @@ namespace AD.FunctionalExtensions.Tests
         }
 
         [TestMethod]
-        public void Int_BothNone()
+        public void BothNone()
         {
             var a = Option<int>.None;
             var b = Option<int>.None;
 
             AreEqual(a, b);
+        }
+
+
+        void AreEqual<TValue>(Option<TValue> a, Option<TValue> b)
+        {
+            Assert.AreEqual(a, b);
+            Assert.IsTrue(a.Equals(b));
+            Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
+        }
+
+        void AreNotEqual<TValue>(Option<TValue> a, Option<TValue> b)
+        {
+            Assert.AreNotEqual(a, b);
+            Assert.IsFalse(a.Equals(b));
         }
     }
 }

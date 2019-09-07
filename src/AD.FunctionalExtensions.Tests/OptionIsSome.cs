@@ -7,7 +7,7 @@ namespace AD.FunctionalExtensions.Tests
     [TestClass]
     public class OptionIsSome
     {
-        readonly Random rnd = new Random();
+        static readonly Random rnd = new Random();
 
         [TestMethod]
         public void Int()
@@ -79,7 +79,7 @@ namespace AD.FunctionalExtensions.Tests
         [TestMethod]
         public void Class()
         {
-            var value = new IsSomeClass();
+            var value = new TestClass();
             var option = Option.Some(value);
 
             if (!option.IsSome(out var optionValue)) Fail("Some expected");
@@ -90,7 +90,7 @@ namespace AD.FunctionalExtensions.Tests
         [TestMethod]
         public void Class_None()
         {
-            var option = Option<IsSomeClass>.None;
+            var option = Option<TestClass>.None;
 
             IsFalse(option.IsSome(out var _), "None expected");
         }
@@ -98,7 +98,34 @@ namespace AD.FunctionalExtensions.Tests
         [TestMethod]
         public void Class_Null()
         {
-            var option = Option<IsSomeClass>.Some(null);
+            var option = Option<TestClass>.Some(null);
+
+            IsFalse(option.IsSome(out var _), "None expected");
+        }
+
+        [TestMethod]
+        public void NullableInt()
+        {
+            int? value = rnd.Next();
+            var option = Option.Some(value);
+
+            if (!option.IsSome(out var optionValue)) Fail("Some expected");
+
+            AreEqual(value, optionValue);
+        }
+
+        [TestMethod]
+        public void NullableInt_None()
+        {
+            var option = Option<int?>.None;
+
+            IsFalse(option.IsSome(out var _), "None expected");
+        }
+
+        [TestMethod]
+        public void NullableInt_Null()
+        {
+            var option = Option<int?>.Some(null);
 
             IsFalse(option.IsSome(out var _), "None expected");
         }
@@ -106,7 +133,7 @@ namespace AD.FunctionalExtensions.Tests
 
         string RandomString() => Guid.NewGuid().ToString();
 
-        class IsSomeClass
+        class TestClass
         { }
     }
 }
