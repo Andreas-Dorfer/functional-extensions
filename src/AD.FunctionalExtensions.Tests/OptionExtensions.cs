@@ -135,5 +135,53 @@ namespace AD.FunctionalExtensions.Tests
 
             IsTrue(actual.IsNone());
         }
+
+        [TestMethod]
+        public void Map_Some()
+        {
+            var value = rnd.Next();
+            var some = value.Some();
+
+            var mappedValue = rnd.NextDouble();
+
+            var actual =
+                some.Map(
+                    mapper: v =>
+                    {
+                        AreEqual(value, v);
+                        return mappedValue;
+                    });
+
+            AreEqual(mappedValue.Some(), actual);
+        }
+
+        [TestMethod]
+        public void Map_SomeToNull()
+        {
+            int? value = rnd.Next();
+            var some = value.Some();
+
+            var actual =
+                some.Map<int?, double?>(
+                    mapper: v =>
+                    {
+                        AreEqual(value, v);
+                        return null;
+                    });
+
+            IsTrue(actual.IsNone());
+        }
+
+        [TestMethod]
+        public void Map_None()
+        {
+            var none = Option<int>.None;
+
+            var actual =
+                none.Map<int, double>(
+                    mapper: _ => throw new AssertFailedException("'mapper' must not be called"));
+
+            IsTrue(actual.IsNone());
+        }
     }
 }

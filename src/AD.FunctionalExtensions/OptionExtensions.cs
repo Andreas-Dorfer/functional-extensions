@@ -29,5 +29,13 @@ namespace AD.FunctionalExtensions
                 onIsSome: binder,
                 onIsNone: () => Option<U>.None);
         }
+
+        public static Option<U> Map<T, U>(this Option<T> option, Func<T, U> mapper)
+        {
+            if (mapper is null) throw new ArgumentNullException(nameof(mapper));
+
+            return option.Bind(
+                value => mapper(value).Some());
+        }
     }
 }
