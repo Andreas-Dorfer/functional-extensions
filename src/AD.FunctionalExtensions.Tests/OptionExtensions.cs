@@ -25,7 +25,7 @@ namespace AD.FunctionalExtensions.Tests
             var value = rnd.Next();
             var option = value.Some();
 
-            var matchedValue = rnd.Next();
+            var matchedValue = rnd.NextDouble();
 
             var actual =
                 option.Match(
@@ -44,7 +44,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             var option = Option<int>.None;
 
-            var matchedValue = rnd.Next();
+            var matchedValue = rnd.NextDouble();
 
             var actual =
                 option.Match(
@@ -84,6 +84,56 @@ namespace AD.FunctionalExtensions.Tests
             var none = Option<int>.None;
 
             IsTrue(none.IsNone());
+        }
+
+        [TestMethod]
+        public void Bind_SomeToSome()
+        {
+            var value = rnd.Next();
+            var some = value.Some();
+
+            var bound = rnd.NextDouble().Some();
+
+            var actual =
+                some.Bind(
+                    binder: v =>
+                    {
+                        AreEqual(value, v);
+                        return bound;
+                    });
+
+            AreEqual(bound, actual);
+        }
+
+        [TestMethod]
+        public void Bind_SomeToNone()
+        {
+            var value = rnd.Next();
+            var some = value.Some();
+
+            var bound = Option<double>.None;
+
+            var actual =
+                some.Bind(
+                    binder: v =>
+                    {
+                        AreEqual(value, v);
+                        return bound;
+                    });
+
+            AreEqual(bound, actual);
+        }
+
+        [TestMethod]
+        public void Bind_None()
+        {
+            var none = Option<int>.None;
+
+            var actual =
+                none.Bind<int, double>(
+                    binder: _ => throw new AssertFailedException("'binder' must not be called"));
+
+            IsTrue(actual.IsNone());
         }
     }
 }

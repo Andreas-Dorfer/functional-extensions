@@ -20,5 +20,14 @@ namespace AD.FunctionalExtensions
                 onIsNone: () => false);
 
         public static bool IsNone<T>(this Option<T> option) => !option.IsSome();
+
+        public static Option<U> Bind<T, U>(this Option<T> option, Func<T, Option<U>> binder)
+        {
+            if (binder is null) throw new ArgumentNullException(nameof(binder));
+
+            return option.Match(
+                onIsSome: binder,
+                onIsNone: () => Option<U>.None);
+        }
     }
 }
