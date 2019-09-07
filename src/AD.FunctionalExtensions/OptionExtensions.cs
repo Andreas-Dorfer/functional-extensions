@@ -27,7 +27,7 @@ namespace AD.FunctionalExtensions
 
             return option.Match(
                 onIsSome: binder,
-                onIsNone: () => Option<U>.None);
+                onIsNone: Option.None<U>);
         }
 
         public static Option<U> Map<T, U>(this Option<T> option, Func<T, U> mapper)
