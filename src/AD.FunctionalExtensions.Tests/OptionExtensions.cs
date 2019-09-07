@@ -34,7 +34,7 @@ namespace AD.FunctionalExtensions.Tests
                         AreEqual(value, v);
                         return matchedValue;
                     },
-                    onIsNone: () => throw new AssertFailedException("'onIsSome' expected"));
+                    onIsNone: () => throw new AssertFailedException("'onIsSome' must not be called"));
 
             AreEqual(matchedValue, actual);
         }
@@ -48,7 +48,7 @@ namespace AD.FunctionalExtensions.Tests
 
             var actual =
                 option.Match(
-                    onIsSome: _ => throw new AssertFailedException("'onIsNone' expected"),
+                    onIsSome: _ => throw new AssertFailedException("'onIsNone' must not be called"),
                     onIsNone: () => matchedValue);
 
             AreEqual(matchedValue, actual);
