@@ -26,7 +26,7 @@ namespace AD.FunctionalExtensions.Tests
             var option = value.Some();
 
             var matchedValue = rnd.Next();
-            
+
             var actual =
                 option.Match(
                     onIsSome: v =>
@@ -52,6 +52,38 @@ namespace AD.FunctionalExtensions.Tests
                     onIsNone: () => matchedValue);
 
             AreEqual(matchedValue, actual);
+        }
+
+        [TestMethod]
+        public void IsSome_True()
+        {
+            var some = rnd.Next().Some();
+
+            IsTrue(some.IsSome());
+        }
+
+        [TestMethod]
+        public void IsSome_False()
+        {
+            var none = Option<int>.None;
+
+            IsFalse(none.IsSome());
+        }
+
+        [TestMethod]
+        public void IsNone_True()
+        {
+            var some = rnd.Next().Some();
+
+            IsFalse(some.IsNone());
+        }
+
+        [TestMethod]
+        public void IsNone_False()
+        {
+            var none = Option<int>.None;
+
+            IsTrue(none.IsNone());
         }
     }
 }

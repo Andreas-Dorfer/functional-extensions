@@ -13,5 +13,12 @@ namespace AD.FunctionalExtensions
 
             return option.IsSome(out var value) ? onIsSome(value) : onIsNone();
         }
+
+        public static bool IsSome<T>(this Option<T> option) =>
+            option.Match(
+                onIsSome: _ => true,
+                onIsNone: () => false);
+
+        public static bool IsNone<T>(this Option<T> option) => !option.IsSome();
     }
 }
