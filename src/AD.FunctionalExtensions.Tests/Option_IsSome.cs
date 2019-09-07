@@ -5,7 +5,7 @@ using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 namespace AD.FunctionalExtensions.Tests
 {
     [TestClass]
-    public class OptionIsSome
+    public class Option_IsSome
     {
         static readonly Random rnd = new Random();
 

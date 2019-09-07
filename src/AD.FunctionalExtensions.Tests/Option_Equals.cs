@@ -4,7 +4,7 @@ using System;
 namespace AD.FunctionalExtensions.Tests
 {
     [TestClass]
-    public class OptionEquals
+    public class Option_Equals
     {
         static readonly Random rnd = new Random();
 
