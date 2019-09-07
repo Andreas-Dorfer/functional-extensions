@@ -15,7 +15,7 @@ namespace AD.FunctionalExtensions.Tests
             var value = rnd.Next();
             var option = Option.Some(value);
 
-            if (!option.IsSome(out var optionValue)) Fail("Some expected");
+            if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
 
             AreEqual(value, optionValue);
         }
@@ -25,7 +25,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             var option = Option<int>.None;
 
-            IsFalse(option.IsSome(out var _), "None expected");
+            IsFalse(option.IsSome(out var _), NoneExpected);
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace AD.FunctionalExtensions.Tests
             var value = rnd.NextDouble();
             var option = Option.Some(value);
 
-            if (!option.IsSome(out var optionValue)) Fail("Some expected");
+            if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
 
             AreEqual(value, optionValue);
         }
@@ -44,7 +44,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             var option = Option<double>.None;
 
-            IsFalse(option.IsSome(out var _), "None expected");
+            IsFalse(option.IsSome(out var _), NoneExpected);
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace AD.FunctionalExtensions.Tests
             var value = RandomString();
             var option = Option.Some(value);
 
-            if (!option.IsSome(out var optionValue)) Fail("Some expected");
+            if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
 
             AreEqual(value, optionValue);
         }
@@ -63,7 +63,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             var option = Option.Some("");
 
-            if (!option.IsSome(out var optionValue)) Fail("Some expected");
+            if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
 
             AreEqual("", optionValue);
         }
@@ -73,7 +73,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             var option = Option<string>.None;
 
-            IsFalse(option.IsSome(out var _), "None expected");
+            IsFalse(option.IsSome(out var _), NoneExpected);
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace AD.FunctionalExtensions.Tests
             var value = new TestClass();
             var option = Option.Some(value);
 
-            if (!option.IsSome(out var optionValue)) Fail("Some expected");
+            if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
 
             AreEqual(value, optionValue);
         }
@@ -92,7 +92,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             var option = Option<TestClass>.None;
 
-            IsFalse(option.IsSome(out var _), "None expected");
+            IsFalse(option.IsSome(out var _), NoneExpected);
         }
 
         [TestMethod]
@@ -100,7 +100,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             var option = Option<TestClass>.Some(null);
 
-            IsFalse(option.IsSome(out var _), "None expected");
+            IsFalse(option.IsSome(out var _), NoneExpected);
         }
 
         [TestMethod]
@@ -109,7 +109,7 @@ namespace AD.FunctionalExtensions.Tests
             int? value = rnd.Next();
             var option = Option.Some(value);
 
-            if (!option.IsSome(out var optionValue)) Fail("Some expected");
+            if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
 
             AreEqual(value, optionValue);
         }
@@ -119,7 +119,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             var option = Option<int?>.None;
 
-            IsFalse(option.IsSome(out var _), "None expected");
+            IsFalse(option.IsSome(out var _), NoneExpected);
         }
 
         [TestMethod]
@@ -127,7 +127,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             var option = Option<int?>.Some(null);
 
-            IsFalse(option.IsSome(out var _), "None expected");
+            IsFalse(option.IsSome(out var _), NoneExpected);
         }
 
 
@@ -135,5 +135,9 @@ namespace AD.FunctionalExtensions.Tests
 
         class TestClass
         { }
+
+
+        const string SomeExpected = "Some expected";
+        const string NoneExpected = "None expected";
     }
 }
