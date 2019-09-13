@@ -1,2 +1,2 @@
-# functional-extensions
-F# inspired functional extensions for C#
+# Functional Extensions for C#
+The extensions in this repository are inspired by F#.
