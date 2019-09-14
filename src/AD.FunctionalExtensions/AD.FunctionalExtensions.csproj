@@ -3,6 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
+    <Authors>Andreas Dorfer</Authors>
+    <Product>AD.FunctionalExtensions</Product>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Description>F# inspired functional extensions for C#</Description>
+    <Copyright></Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryType></RepositoryType>
+    <PackageTags>C#, functional extensions</PackageTags>
+    <RepositoryUrl>https://github.com/Andreas-Dorfer/functional-extensions</RepositoryUrl>
+    <Company />
   </PropertyGroup>
 
 </Project>
