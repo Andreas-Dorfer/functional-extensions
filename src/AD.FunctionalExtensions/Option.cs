@@ -59,11 +59,11 @@ namespace AD.FunctionalExtensions
 
         int CompareTo(Option<TValue> other, IComparer comparer)
         {
-            if (!isSome && other.isSome) return -1;
-            if (isSome && !other.isSome) return 1;
-            if (AreBothNone(other)) return 0;
-
-            return comparer.Compare(value, other.value);
+            if (!isSome)
+            {
+                return !other.isSome ? 0 : -1;
+            }
+            return !other.isSome ? 1 : comparer.Compare(value, other.value);
         }
 
 
