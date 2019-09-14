@@ -6,7 +6,7 @@ namespace AD.FunctionalExtensions
 {
     public struct Option<TValue> : IEquatable<Option<TValue>>, IStructuralEquatable, IComparable<Option<TValue>>, IComparable, IStructuralComparable
     {
-        public static Option<TValue> None { get; } = default;
+        public static Option<TValue> None => default;
 
         public static Option<TValue> Some(TValue value) => new Option<TValue>(value);
 
