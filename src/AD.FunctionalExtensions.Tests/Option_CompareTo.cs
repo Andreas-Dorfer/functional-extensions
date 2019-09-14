@@ -7,6 +7,8 @@ namespace AD.FunctionalExtensions.Tests
     [TestClass]
     public class Option_CompareTo
     {
+        static readonly Random rnd = new Random();
+
         [TestMethod]
         public void Compare()
         {
@@ -14,7 +16,7 @@ namespace AD.FunctionalExtensions.Tests
             var b = 2.Some();
 
             IsTrue(a.CompareTo(b) < 0);
-            IsTrue(a.CompareTo(a) == 0);
+            AreEqual(0, a.CompareTo(a));
             IsTrue(b.CompareTo(a) > 0);
         }
 
@@ -22,7 +24,7 @@ namespace AD.FunctionalExtensions.Tests
         public void Compare_FirstNone()
         {
             var a = Option<int>.None;
-            var b = 2.Some();
+            var b = rnd.Next().Some();
 
             IsTrue(a.CompareTo(b) < 0);
             IsTrue(b.CompareTo(a) > 0);
@@ -31,7 +33,7 @@ namespace AD.FunctionalExtensions.Tests
         [TestMethod]
         public void Compare_SecondNone()
         {
-            var a = 1.Some();
+            var a = rnd.Next().Some();
             var b = Option<int>.None;
 
             IsTrue(a.CompareTo(b) > 0);
@@ -44,7 +46,7 @@ namespace AD.FunctionalExtensions.Tests
             var a = Option<int>.None;
             var b = Option<int>.None;
 
-            IsTrue(a.CompareTo(b) == 0);
+            AreEqual(0, a.CompareTo(b));
         }
 
         [TestMethod]
@@ -54,7 +56,7 @@ namespace AD.FunctionalExtensions.Tests
             IComparable b = 2.Some();
 
             IsTrue(a.CompareTo(b) < 0);
-            IsTrue(a.CompareTo(a) == 0);
+            AreEqual(0, a.CompareTo(a));
             IsTrue(b.CompareTo(a) > 0);
         }
     }
