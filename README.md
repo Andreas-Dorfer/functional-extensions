@@ -21,7 +21,7 @@ if (a.IsSome(out var value))
 ```csharp
 var a = Option.Some("functional extensions for c#");
 
-var upperText = a.Match(
+var upper = a.Match(
     onIsSome: value => value.ToUpper(),
     onIsNone: () => string.Empty);
 ```
@@ -30,7 +30,7 @@ See [bind](https://msdn.microsoft.com/visualfsharpdocs/conceptual/option.bind%5b
 ```csharp
 var a = Option.Some('C');
 
-var message = a.Bind(value =>
+var hexDigit = a.Bind(value =>
 {
     switch (value)
     {
