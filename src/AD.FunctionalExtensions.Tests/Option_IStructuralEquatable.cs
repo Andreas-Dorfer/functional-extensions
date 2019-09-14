@@ -60,7 +60,7 @@ namespace AD.FunctionalExtensions.Tests
             IStructuralEquatable a = Option<int>.None;
             IStructuralEquatable b = rnd.Next().Some();
 
-            var comparer = new EqualityComparer(equals: (_, __) => throw new AssertFailedException($"'{nameof(IStructuralEquatable.Equals)}' must not be called"));
+            var comparer = new EqualityComparer(equals: (_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.Equals))));
 
             IsFalse(a.Equals(b, comparer));
         }
@@ -71,7 +71,7 @@ namespace AD.FunctionalExtensions.Tests
             IStructuralEquatable a = rnd.Next().Some();
             IStructuralEquatable b = Option<int>.None;
 
-            var comparer = new EqualityComparer(equals: (_, __) => throw new AssertFailedException($"'{nameof(IStructuralEquatable.Equals)}' must not be called"));
+            var comparer = new EqualityComparer(equals: (_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.Equals))));
 
             IsFalse(a.Equals(b, comparer));
         }
@@ -82,7 +82,7 @@ namespace AD.FunctionalExtensions.Tests
             IStructuralEquatable a = Option<int>.None;
             IStructuralEquatable b = Option<int>.None;
 
-            var comparer = new EqualityComparer(equals: (_, __) => throw new AssertFailedException($"'{nameof(IStructuralEquatable.Equals)}' must not be called"));
+            var comparer = new EqualityComparer(equals: (_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.Equals))));
 
             IsTrue(a.Equals(b, comparer));
         }
@@ -108,7 +108,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             IStructuralEquatable a = Option<int>.None;
 
-            var comparer = new EqualityComparer(getHashCode: _ => throw new AssertFailedException($"'{nameof(IStructuralEquatable.GetHashCode)}' must not be called"));
+            var comparer = new EqualityComparer(getHashCode: _ => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.GetHashCode))));
 
             var expected = Option<int>.None.GetHashCode();
             AreEqual(expected, a.GetHashCode(comparer));
@@ -132,5 +132,8 @@ namespace AD.FunctionalExtensions.Tests
 
             public int GetHashCode(object obj) => getHashCode(obj);
         }
+
+
+        static string MustNotBeCalled(string name) => $"'{name}' must not be called";
     }
 }
