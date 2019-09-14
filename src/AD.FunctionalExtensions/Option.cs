@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AD.FunctionalExtensions
 {
-    public struct Option<TValue> : IEquatable<Option<TValue>>, IStructuralEquatable
+    public struct Option<TValue> : IEquatable<Option<TValue>>, IStructuralEquatable, IComparable<Option<TValue>>, IComparable, IStructuralComparable
     {
         public static Option<TValue> None { get; } = default;
 
@@ -41,16 +41,33 @@ namespace AD.FunctionalExtensions
 
         bool AreBothSome(Option<TValue> other) => isSome && other.isSome;
 
-        bool AreValuesEqual(Option<TValue> other, IEqualityComparer comparer) =>
-            comparer.Equals(value, other.value);
+        bool AreValuesEqual(Option<TValue> other, IEqualityComparer comparer) => comparer.Equals(value, other.value);
 
 
         public override int GetHashCode() => GetHashCode(EqualityComparer<TValue>.Default);
 
         int IStructuralEquatable.GetHashCode(IEqualityComparer comparer) => GetHashCode(comparer);
 
-        int GetHashCode(IEqualityComparer comparer) =>
-            isSome ? comparer.GetHashCode(value) : int.MinValue;
+        int GetHashCode(IEqualityComparer comparer) => isSome ? comparer.GetHashCode(value) : int.MinValue;
+
+
+        int IComparable.CompareTo(object obj) => obj is ValueTuple<TValue> ? CompareTo((Option<TValue>)obj) : throw new ArgumentException();
+
+        public int CompareTo(Option<TValue> other) => CompareTo(other, Comparer<TValue>.Default);
+
+        int IStructuralComparable.CompareTo(object other, IComparer comparer) => other is Option<TValue> ? CompareTo((Option<TValue>)other, comparer) : throw new ArgumentException();
+
+        int CompareTo(Option<TValue> other, IComparer comparer)
+        {
+            if (!isSome && other.isSome) return -1;
+            if (isSome && !other.isSome) return 1;
+            if (AreBothNone(other)) return 0;
+
+            return comparer.Compare(value, other.value);
+        }
+
+
+        public override string ToString() => isSome ? $"Some({value})" : "None";
     }
 
     public static class Option
