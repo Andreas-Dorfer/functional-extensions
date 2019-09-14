@@ -51,7 +51,7 @@ namespace AD.FunctionalExtensions
         int GetHashCode(IEqualityComparer comparer) => isSome ? comparer.GetHashCode(value) : int.MinValue;
 
 
-        int IComparable.CompareTo(object obj) => obj is ValueTuple<TValue> ? CompareTo((Option<TValue>)obj) : throw new ArgumentException();
+        int IComparable.CompareTo(object obj) => obj is Option<TValue> ? CompareTo((Option<TValue>)obj) : throw new ArgumentException();
 
         public int CompareTo(Option<TValue> other) => CompareTo(other, Comparer<TValue>.Default);
 
