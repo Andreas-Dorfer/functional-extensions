@@ -55,7 +55,7 @@ namespace AD.FunctionalExtensions
         {
             if (!isSome)
             {
-                return !other.isSome ? 0 : -1;
+                return other.isSome ? -1 : 0;
             }
             return !other.isSome ? 1 : comparer.Compare(value, other.value);
         }
