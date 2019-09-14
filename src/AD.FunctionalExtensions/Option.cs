@@ -34,14 +34,8 @@ namespace AD.FunctionalExtensions
         bool IStructuralEquatable.Equals(object other, IEqualityComparer comparer) => other is Option<TValue> && Equals((Option<TValue>)other, comparer);
 
         bool Equals(Option<TValue> other, IEqualityComparer comparer) =>
-            AreBothNone(other) ||
-            AreBothSome(other) && AreValuesEqual(other, comparer);
-
-        bool AreBothNone(Option<TValue> other) => !(isSome || other.isSome);
-
-        bool AreBothSome(Option<TValue> other) => isSome && other.isSome;
-
-        bool AreValuesEqual(Option<TValue> other, IEqualityComparer comparer) => comparer.Equals(value, other.value);
+            !(isSome || other.isSome) ||
+            isSome && other.isSome && comparer.Equals(value, other.value);
 
 
         public override int GetHashCode() => GetHashCode(EqualityComparer<TValue>.Default);
