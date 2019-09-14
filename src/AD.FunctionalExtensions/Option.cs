@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace AD.FunctionalExtensions
 {
-    public struct Option<TValue> : IEquatable<Option<TValue>>
+    public struct Option<TValue> : IEquatable<Option<TValue>>, IStructuralEquatable
     {
         public static Option<TValue> None { get; } = default;
 
-        public static Option<TValue> Some(TValue value) => value != null ? new Option<TValue>(value) : None;
+        public static Option<TValue> Some(TValue value) => new Option<TValue>(value);
 
 
         readonly TValue value;
@@ -15,41 +16,41 @@ namespace AD.FunctionalExtensions
 
         Option(TValue value)
         {
-            Debug.Assert(value != null, $"'{nameof(value)}' must not be null.");
-            this.value = value;
-            isSome = true;
+            isSome = (this.value = value) != null;
         }
 
 
         public bool IsSome(out TValue value)
         {
-            if (isSome)
-            {
-                value = this.value;
-                return true;
-            }
-            else
-            {
-                value = default;
-                return false;
-            }
+            value = this.value;
+            return isSome;
         }
 
 
-        public bool Equals(Option<TValue> other) =>
+        public override bool Equals(object obj) => obj is Option<TValue> && Equals((Option<TValue>)obj);
+
+        public bool Equals(Option<TValue> other) => Equals(other, EqualityComparer<TValue>.Default);
+
+        bool IStructuralEquatable.Equals(object other, IEqualityComparer comparer) => other is Option<TValue> && Equals((Option<TValue>)other, comparer);
+
+        bool Equals(Option<TValue> other, IEqualityComparer comparer) =>
             AreBothNone(other) ||
-            AreBothSome(other) && AreValuesEqual(other);
-
-        public override bool Equals(object obj) => obj is Option<TValue> ? Equals((Option<TValue>)obj) : false;
-
-        public override int GetHashCode() => isSome ? value.GetHashCode() : int.MinValue;
-
+            AreBothSome(other) && AreValuesEqual(other, comparer);
 
         bool AreBothNone(Option<TValue> other) => !(isSome || other.isSome);
 
         bool AreBothSome(Option<TValue> other) => isSome && other.isSome;
 
-        bool AreValuesEqual(Option<TValue> other) => value.Equals(other.value);
+        bool AreValuesEqual(Option<TValue> other, IEqualityComparer comparer) =>
+            comparer.Equals(value, other.value);
+
+
+        public override int GetHashCode() => GetHashCode(EqualityComparer<TValue>.Default);
+
+        int IStructuralEquatable.GetHashCode(IEqualityComparer comparer) => GetHashCode(comparer);
+
+        int GetHashCode(IEqualityComparer comparer) =>
+            isSome ? comparer.GetHashCode(value) : int.MinValue;
     }
 
     public static class Option
