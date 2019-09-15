@@ -7,15 +7,49 @@ Some basic F# features for C#.
 See [Options](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/options) in the F# docs.
 ```csharp
 var a = Option.Some(1);
+var b = 1.Some();
 var none = Option<int>.None;
 ```
 ### Get the Value out of an Option
 ```csharp
-var a = Option.Some(1);
+var a = 1.Some();
 if (a.IsSome(out var value))
 {
-    Console.WriteLine(value);
+    Console.WriteLine(value); //1
 }
+```
+### Compare Options
+Option implements ```IEquatable<Option<TValue>>```.
+```csharp
+var a = 3.Some();
+a.Equals(7.Some()); //false
+a.Equals(3.Some()); //true
+a.Equals(Option<int>.None); //false
+```
+Option implements ```IComparable<Option<TValue>>```.
+```csharp
+var list = new List<Option<int>>
+{
+    4.Some(),
+    1.Some(),
+    Option<int>.None,
+    2.Some(),
+    3.Some()
+};
+list.Sort();
+//None
+//Some(1)
+//Some(2)
+//Some(3)
+//Some(4)
+```
+Option implements ```IStructuralEquatable``` and ```IStructuralComparable```.
+```csharp
+var a = "cat".Some();
+var b = "CAT".Some();
+
+((IStructuralEquatable)a).Equals(b, StringComparer.InvariantCultureIgnoreCase); //true
+((IStructuralComparable)a).CompareTo(b, StringComparer.InvariantCultureIgnoreCase); //0
 ```
 ## Pattern Matching
 ```csharp
