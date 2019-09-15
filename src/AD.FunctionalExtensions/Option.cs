@@ -31,18 +31,24 @@ namespace AD.FunctionalExtensions
 
         public bool Equals(Option<TValue> other) => Equals(other, EqualityComparer<TValue>.Default);
 
-        bool IStructuralEquatable.Equals(object other, IEqualityComparer comparer) => other is Option<TValue> && Equals((Option<TValue>)other, comparer);
+        bool IStructuralEquatable.Equals(object other, IEqualityComparer comparer) =>
+            other is Option<TValue> && Equals((Option<TValue>)other, (x, y) => comparer.Equals(x, y));
 
-        bool Equals(Option<TValue> other, IEqualityComparer comparer) =>
+        public bool Equals(Option<TValue> other, IEqualityComparer<TValue> comparer) =>
+            Equals(other, comparer.Equals);
+
+        bool Equals(Option<TValue> other, Func<TValue, TValue, bool> equals) =>
             !(isSome || other.isSome) ||
-            isSome && other.isSome && comparer.Equals(value, other.value);
+            isSome && other.isSome && equals(value, other.value);
 
 
         public override int GetHashCode() => GetHashCode(EqualityComparer<TValue>.Default);
 
-        int IStructuralEquatable.GetHashCode(IEqualityComparer comparer) => GetHashCode(comparer);
+        int IStructuralEquatable.GetHashCode(IEqualityComparer comparer) => GetHashCode(obj => comparer.GetHashCode(obj));
 
-        int GetHashCode(IEqualityComparer comparer) => isSome ? comparer.GetHashCode(value) : int.MinValue;
+        public int GetHashCode(IEqualityComparer<TValue> comparer) => GetHashCode(comparer.GetHashCode);
+
+        int GetHashCode(Func<TValue, int> getHashCode) => isSome ? getHashCode(value) : int.MinValue;
 
 
         int IComparable.CompareTo(object obj) => obj is Option<TValue> ? CompareTo((Option<TValue>)obj) : throw new ArgumentException();
