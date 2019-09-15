@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace AD.FunctionalExtensions.Tests
@@ -14,13 +15,13 @@ namespace AD.FunctionalExtensions.Tests
         public void Compare()
         {
             var aValue = rnd.Next();
-            IStructuralComparable a = aValue.Some();
+            var a = aValue.Some();
             int bValue;
             do { bValue = rnd.Next(); } while (bValue == aValue);
-            IStructuralComparable b = bValue.Some();
+            var b = bValue.Some();
 
             var compareValue = rnd.Next();
-            var comparer = new Comparer((x, y) =>
+            var comparer = new Comparer<int>((x, y) =>
             {
                 AreEqual(aValue, x);
                 AreEqual(bValue, y);
@@ -29,43 +30,47 @@ namespace AD.FunctionalExtensions.Tests
             });
 
             AreEqual(compareValue, a.CompareTo(b, comparer));
+            AreEqual(compareValue, ((IStructuralComparable)a).CompareTo(b, comparer));
         }
 
         [TestMethod]
         public void Compare_FirstNone()
         {
-            IStructuralComparable a = Option<int>.None;
-            IStructuralComparable b = rnd.Next().Some();
+            var a = Option<int>.None;
+            var b = rnd.Next().Some();
 
-            var comparer = new Comparer((_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IComparable.CompareTo))));
+            var comparer = new Comparer<int>((_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IComparable.CompareTo))));
 
             IsTrue(a.CompareTo(b, comparer) < 0);
+            IsTrue(((IStructuralComparable)a).CompareTo(b, comparer) < 0);
         }
 
         [TestMethod]
         public void Compare_SecondNone()
         {
-            IStructuralComparable a = rnd.Next().Some();
-            IStructuralComparable b = Option<int>.None;
+            var a = rnd.Next().Some();
+            var b = Option<int>.None;
 
-            var comparer = new Comparer((_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IComparable.CompareTo))));
+            var comparer = new Comparer<int>((_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IComparable.CompareTo))));
 
             IsTrue(a.CompareTo(b, comparer) > 0);
+            IsTrue(((IStructuralComparable)a).CompareTo(b, comparer) > 0);
         }
 
         [TestMethod]
         public void Compare_BothNone()
         {
-            IStructuralComparable a = Option<int>.None;
-            IStructuralComparable b = Option<int>.None;
+            var a = Option<int>.None;
+            var b = Option<int>.None;
 
-            var comparer = new Comparer((_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IComparable.CompareTo))));
+            var comparer = new Comparer<int>((_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IComparable.CompareTo))));
 
             AreEqual(0, a.CompareTo(b, comparer));
+            AreEqual(0, ((IStructuralComparable)a).CompareTo(b, comparer));
         }
 
 
-        class Comparer : IComparer
+        class Comparer<T> : IComparer, IComparer<T>
         {
             readonly Func<object, object, int> compare;
 
@@ -75,6 +80,8 @@ namespace AD.FunctionalExtensions.Tests
             }
 
             public int Compare(object x, object y) => compare(x, y);
+
+            public int Compare(T x, T y) => compare(x, y);
         }
 
 
