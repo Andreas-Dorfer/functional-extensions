@@ -2,7 +2,7 @@
 # Functional Extensions for C#
 Some basic F# features for C#.
 ## NuGet Package
-    PM> Install-Package AD.FunctionalExtensions -Version 1.0.0
+    PM> Install-Package AD.FunctionalExtensions -Version 1.0.1
 ## Option
 See [Options](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/options) in the F# docs.
 ```csharp
@@ -85,3 +85,5 @@ var a = Option.Some(7);
 
 var b = a.Map(value => value * 2);
 ```
+## Tests
+Want to see more examples? Have a look at the [test code](https://github.com/Andreas-Dorfer/functional-extensions/tree/master/src/AD.FunctionalExtensions.Tests)!
