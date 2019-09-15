@@ -55,15 +55,18 @@ namespace AD.FunctionalExtensions
 
         public int CompareTo(Option<TValue> other) => CompareTo(other, Comparer<TValue>.Default);
 
-        int IStructuralComparable.CompareTo(object other, IComparer comparer) => other is Option<TValue> ? CompareTo((Option<TValue>)other, comparer) : throw new ArgumentException();
+        int IStructuralComparable.CompareTo(object other, IComparer comparer) =>
+            other is Option<TValue> ? CompareTo((Option<TValue>)other, (x, y) => comparer.Compare(x, y)) : throw new ArgumentException();
 
-        int CompareTo(Option<TValue> other, IComparer comparer)
+        public int CompareTo(Option<TValue> other, IComparer<TValue> comparer) => CompareTo(other, comparer.Compare);
+
+        int CompareTo(Option<TValue> other, Func<TValue, TValue, int> compare)
         {
             if (!isSome)
             {
                 return other.isSome ? -1 : 0;
             }
-            return !other.isSome ? 1 : comparer.Compare(value, other.value);
+            return !other.isSome ? 1 : compare(value, other.value);
         }
 
 
