@@ -27,9 +27,11 @@ namespace AD.FunctionalExtensions
         }
 
 
-        public override bool Equals(object obj) => obj is Option<TValue> && Equals((Option<TValue>)obj);
+        public override bool Equals(object obj) =>
+            obj is Option<TValue> && Equals((Option<TValue>)obj);
 
-        public bool Equals(Option<TValue> other) => Equals(other, EqualityComparer<TValue>.Default);
+        public bool Equals(Option<TValue> other) =>
+            Equals(other, EqualityComparer<TValue>.Default);
 
         bool IStructuralEquatable.Equals(object other, IEqualityComparer comparer) =>
             other is Option<TValue> && Equals((Option<TValue>)other, (x, y) => comparer.Equals(x, y));
@@ -42,23 +44,36 @@ namespace AD.FunctionalExtensions
             isSome && other.isSome && equals(value, other.value);
 
 
-        public override int GetHashCode() => GetHashCode(EqualityComparer<TValue>.Default);
+        public override int GetHashCode() =>
+            GetHashCode(EqualityComparer<TValue>.Default);
 
-        int IStructuralEquatable.GetHashCode(IEqualityComparer comparer) => GetHashCode(obj => comparer.GetHashCode(obj));
+        int IStructuralEquatable.GetHashCode(IEqualityComparer comparer) =>
+            GetHashCode(obj => comparer.GetHashCode(obj));
 
-        public int GetHashCode(IEqualityComparer<TValue> comparer) => GetHashCode(comparer.GetHashCode);
+        public int GetHashCode(IEqualityComparer<TValue> comparer) =>
+            GetHashCode(comparer.GetHashCode);
 
-        int GetHashCode(Func<TValue, int> getHashCode) => isSome ? getHashCode(value) : int.MinValue;
+        int GetHashCode(Func<TValue, int> getHashCode) =>
+            isSome ? getHashCode(value) : int.MinValue;
 
 
-        int IComparable.CompareTo(object obj) => obj is Option<TValue> ? CompareTo((Option<TValue>)obj) : throw new ArgumentException();
+        int IComparable.CompareTo(object obj)
+        {
+            if (!(obj is Option<TValue>)) throw new ArgumentException();
+            return CompareTo((Option<TValue>)obj);
+        }
 
-        public int CompareTo(Option<TValue> other) => CompareTo(other, Comparer<TValue>.Default);
+        public int CompareTo(Option<TValue> other) =>
+            CompareTo(other, Comparer<TValue>.Default);
 
-        int IStructuralComparable.CompareTo(object other, IComparer comparer) =>
-            other is Option<TValue> ? CompareTo((Option<TValue>)other, (x, y) => comparer.Compare(x, y)) : throw new ArgumentException();
+        int IStructuralComparable.CompareTo(object other, IComparer comparer)
+        {
+            if (!(other is Option<TValue>)) throw new ArgumentException();
+            return CompareTo((Option<TValue>)other, (x, y) => comparer.Compare(x, y));
+        }
 
-        public int CompareTo(Option<TValue> other, IComparer<TValue> comparer) => CompareTo(other, comparer.Compare);
+        public int CompareTo(Option<TValue> other, IComparer<TValue> comparer) =>
+            CompareTo(other, comparer.Compare);
 
         int CompareTo(Option<TValue> other, Func<TValue, TValue, int> compare)
         {
