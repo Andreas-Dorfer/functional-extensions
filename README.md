@@ -10,6 +10,14 @@ var a = Option.Some(1);
 var b = 1.Some();
 var none = Option<int>.None;
 ```
+### No Null
+```null``` is treated as ```None```.
+```csharp
+var a = Option.Some<string>(null);
+
+a.IsSome(); //fale
+a.IsNone(); //true
+```
 ### Get the Value out of an Option
 ```csharp
 var a = 1.Some();
@@ -48,8 +56,8 @@ Option implements ```IStructuralEquatable``` and ```IStructuralComparable```.
 var a = "cat".Some();
 var b = "CAT".Some();
 
-((IStructuralEquatable)a).Equals(b, StringComparer.InvariantCultureIgnoreCase); //true
-((IStructuralComparable)a).CompareTo(b, StringComparer.InvariantCultureIgnoreCase); //0
+a.Equals(b, StringComparer.InvariantCultureIgnoreCase); //true
+a.CompareTo(b, StringComparer.InvariantCultureIgnoreCase); //0
 ```
 ## Pattern Matching
 ```csharp
