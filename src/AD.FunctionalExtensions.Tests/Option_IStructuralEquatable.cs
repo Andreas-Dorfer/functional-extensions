@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace AD.FunctionalExtensions.Tests
@@ -14,11 +15,11 @@ namespace AD.FunctionalExtensions.Tests
         public void Equals_True()
         {
             var value = rnd.Next();
-            IStructuralEquatable a = Option.Some(value);
-            IStructuralEquatable b = Option.Some(value);
+            var a = Option.Some(value);
+            var b = Option.Some(value);
 
             var comparerEqualsCalled = false;
-            var comparer = new EqualityComparer(equals: (x, y) =>
+            var comparer = new EqualityComparer<int>(equals: (x, y) =>
             {
                 AreEqual(value, x);
                 AreEqual(value, y);
@@ -28,6 +29,7 @@ namespace AD.FunctionalExtensions.Tests
             });
 
             IsTrue(a.Equals(b, comparer));
+            IsTrue(((IStructuralEquatable)a).Equals(b, comparer));
             IsTrue(comparerEqualsCalled);
         }
 
@@ -35,13 +37,13 @@ namespace AD.FunctionalExtensions.Tests
         public void Equals_False()
         {
             var aValue = rnd.Next();
-            IStructuralEquatable a = Option.Some(aValue);
+            var a = Option.Some(aValue);
             int bValue;
             do { bValue = rnd.Next(); } while (bValue == aValue);
-            IStructuralEquatable b = Option.Some(bValue);
+            var b = Option.Some(bValue);
 
             var comparerEqualsCalled = false;
-            var comparer = new EqualityComparer(equals: (x, y) =>
+            var comparer = new EqualityComparer<int>(equals: (x, y) =>
             {
                 AreEqual(aValue, x);
                 AreEqual(bValue, y);
@@ -51,71 +53,77 @@ namespace AD.FunctionalExtensions.Tests
             });
 
             IsFalse(a.Equals(b, comparer));
+            IsFalse(((IStructuralEquatable)a).Equals(b, comparer));
             IsTrue(comparerEqualsCalled);
         }
 
         [TestMethod]
         public void Equals_FirstNone()
         {
-            IStructuralEquatable a = Option<int>.None;
-            IStructuralEquatable b = rnd.Next().Some();
+            var a = Option<int>.None;
+            var b = rnd.Next().Some();
 
-            var comparer = new EqualityComparer(equals: (_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.Equals))));
+            var comparer = new EqualityComparer<int>(equals: (_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.Equals))));
 
             IsFalse(a.Equals(b, comparer));
+            IsFalse(((IStructuralEquatable)a).Equals(b, comparer));
         }
 
         [TestMethod]
         public void Equals_SecondNone()
         {
-            IStructuralEquatable a = rnd.Next().Some();
-            IStructuralEquatable b = Option<int>.None;
+            var a = rnd.Next().Some();
+            var b = Option<int>.None;
 
-            var comparer = new EqualityComparer(equals: (_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.Equals))));
+            var comparer = new EqualityComparer<int>(equals: (_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.Equals))));
 
             IsFalse(a.Equals(b, comparer));
+            IsFalse(((IStructuralEquatable)a).Equals(b, comparer));
         }
 
         [TestMethod]
         public void Equals_BothNone()
         {
-            IStructuralEquatable a = Option<int>.None;
-            IStructuralEquatable b = Option<int>.None;
+            var a = Option<int>.None;
+            var b = Option<int>.None;
 
-            var comparer = new EqualityComparer(equals: (_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.Equals))));
+            var comparer = new EqualityComparer<int>(equals: (_, __) => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.Equals))));
 
             IsTrue(a.Equals(b, comparer));
+            IsTrue(((IStructuralEquatable)a).Equals(b, comparer));
         }
 
         [TestMethod]
         public void GetHashCode_Some()
         {
             var value = rnd.Next();
-            IStructuralEquatable a = value.Some();
+            var a = value.Some();
 
             var hashCode = rnd.Next();
-            var comparer = new EqualityComparer(getHashCode: obj =>
+            var comparer = new EqualityComparer<int>(getHashCode: obj =>
             {
                 AreEqual(value, obj);
                 return hashCode;
             });
 
             AreEqual(hashCode, a.GetHashCode(comparer));
+            AreEqual(hashCode, ((IStructuralEquatable)a).GetHashCode(comparer));
         }
 
         [TestMethod]
         public void GetHashCode_None()
         {
-            IStructuralEquatable a = Option<int>.None;
+            var a = Option<int>.None;
 
-            var comparer = new EqualityComparer(getHashCode: _ => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.GetHashCode))));
+            var comparer = new EqualityComparer<int>(getHashCode: _ => throw new AssertFailedException(MustNotBeCalled(nameof(IStructuralEquatable.GetHashCode))));
 
             var expected = Option<int>.None.GetHashCode();
             AreEqual(expected, a.GetHashCode(comparer));
+            AreEqual(expected, ((IStructuralEquatable)a).GetHashCode(comparer));
         }
 
 
-        class EqualityComparer : IEqualityComparer
+        class EqualityComparer<T> : IEqualityComparer, IEqualityComparer<T>
         {
             readonly Func<object, object, bool> equals;
             readonly Func<object, int> getHashCode;
@@ -130,7 +138,11 @@ namespace AD.FunctionalExtensions.Tests
 
             public new bool Equals(object x, object y) => equals(x, y);
 
+            public bool Equals(T x, T y) => equals(x, y);
+
             public int GetHashCode(object obj) => getHashCode(obj);
+
+            public int GetHashCode(T obj) => getHashCode(obj);
         }
 
 
