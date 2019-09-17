@@ -85,6 +85,12 @@ namespace AD.FunctionalExtensions
         }
 
 
+        public static bool operator ==(Option<TValue> a, Option<TValue> b) =>
+            a.Equals(b);
+
+        public static bool operator !=(Option<TValue> a, Option<TValue> b) =>
+            !(a == b);
+
         public override string ToString() => isSome ? $"Some({value})" : "None";
     }
 

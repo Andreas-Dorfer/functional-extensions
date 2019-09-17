@@ -63,6 +63,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             Assert.AreEqual(a, b);
             Assert.IsTrue(a.Equals(b));
+            Assert.IsTrue(a == b);
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
         }
 
@@ -70,6 +71,7 @@ namespace AD.FunctionalExtensions.Tests
         {
             Assert.AreNotEqual(a, b);
             Assert.IsFalse(a.Equals(b));
+            Assert.IsTrue(a != b);
         }
     }
 }
