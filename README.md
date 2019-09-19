@@ -2,7 +2,7 @@
 # Functional Extensions for C#
 Some basic F# features for C#.
 ## NuGet Package
-    PM> Install-Package AD.FunctionalExtensions -Version 1.0.1
+    PM> Install-Package AD.FunctionalExtensions -Version 1.0.2
 ## Option
 See [Options](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/options) in the F# docs.
 ```csharp
@@ -30,9 +30,18 @@ if (a.IsSome(out var value))
 Option implements ```IEquatable<Option<TValue>>```.
 ```csharp
 var a = 3.Some();
+
 a.Equals(7.Some()); //false
+a == 7.Some();      //false
+a != 7.Some();      //true
+
 a.Equals(3.Some()); //true
+a == 3.Some();      //true
+a != 3.Some();      //false
+
 a.Equals(Option<int>.None); //false
+a == Option<int>.None;      //false
+a != Option<int>.None;      //true
 ```
 Option implements ```IComparable<Option<TValue>>```.
 ```csharp
