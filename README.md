@@ -19,6 +19,7 @@ a.IsSome(); //fale
 a.IsNone(); //true
 ```
 ### Get the Value out of an Option
+The only way to get the value out of an ```Option``` is in a TryGet-like manner.
 ```csharp
 var a = 1.Some();
 if (a.IsSome(out var value))
