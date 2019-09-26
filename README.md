@@ -27,7 +27,7 @@ if (a.IsSome(out var value))
     Console.WriteLine(value); //1
 }
 ```
-```IsSome``` supports [nullable / non-nullable reference types](https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/nullable-reference-types).
+[IsSome](https://github.com/Andreas-Dorfer/functional-extensions/blob/b507dc898902fb9c7381bb55598eef0e28849ac2/src/AD.FunctionalExtensions/Option.cs#L24) supports [nullable / non-nullable reference types](https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/nullable-reference-types).
 ### Compare Options
 Option implements ```IEquatable<Option<TValue>>```.
 ```csharp
