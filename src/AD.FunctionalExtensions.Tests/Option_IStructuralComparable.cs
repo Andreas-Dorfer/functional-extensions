@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace AD.FunctionalExtensions.Tests
@@ -72,16 +73,16 @@ namespace AD.FunctionalExtensions.Tests
 
         class Comparer<T> : IComparer, IComparer<T>
         {
-            readonly Func<object, object, int> compare;
+            readonly Func<object?, object?, int> compare;
 
-            public Comparer(Func<object, object, int> compare)
+            public Comparer(Func<object?, object?, int> compare)
             {
                 this.compare = compare;
             }
 
-            public int Compare(object x, object y) => compare(x, y);
+            public int Compare(object? x, object? y) => compare(x, y);
 
-            public int Compare(T x, T y) => compare(x, y);
+            public int Compare([AllowNull]T x, [AllowNull]T y) => compare(x, y);
         }
 
 

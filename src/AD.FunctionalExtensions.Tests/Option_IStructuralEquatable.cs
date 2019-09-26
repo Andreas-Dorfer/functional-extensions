@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using static Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace AD.FunctionalExtensions.Tests
@@ -125,24 +126,24 @@ namespace AD.FunctionalExtensions.Tests
 
         class EqualityComparer<T> : IEqualityComparer, IEqualityComparer<T>
         {
-            readonly Func<object, object, bool> equals;
-            readonly Func<object, int> getHashCode;
+            readonly Func<object?, object?, bool> equals;
+            readonly Func<object?, int> getHashCode;
 
             public EqualityComparer(
-                Func<object, object, bool> equals = null,
-                Func<object, int> getHashCode = null)
+                Func<object?, object?, bool> equals = null!,
+                Func<object?, int> getHashCode = null!)
             {
                 this.equals = equals;
                 this.getHashCode = getHashCode;
             }
 
-            public new bool Equals(object x, object y) => equals(x, y);
+            public new bool Equals(object? x, object? y) => equals(x, y);
 
-            public bool Equals(T x, T y) => equals(x, y);
+            public bool Equals([AllowNull]T x, [AllowNull]T y) => equals(x, y);
 
             public int GetHashCode(object obj) => getHashCode(obj);
 
-            public int GetHashCode(T obj) => getHashCode(obj);
+            public int GetHashCode([DisallowNull]T obj) => getHashCode(obj);
         }
 
 

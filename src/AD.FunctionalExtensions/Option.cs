@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AD.FunctionalExtensions
 {
@@ -8,19 +9,19 @@ namespace AD.FunctionalExtensions
     {
         public static Option<TValue> None => default;
 
-        public static Option<TValue> Some(TValue value) => new Option<TValue>(value);
+        public static Option<TValue> Some([AllowNull]TValue value) => new Option<TValue>(value);
 
 
         readonly TValue value;
         readonly bool isSome;
 
-        Option(TValue value)
+        Option([AllowNull]TValue value)
         {
-            isSome = (this.value = value) != null;
+            isSome = (this.value = value) is { };
         }
 
 
-        public bool IsSome(out TValue value)
+        public bool IsSome([MaybeNullWhen(false)]out TValue value)
         {
             value = this.value;
             return isSome;
@@ -28,20 +29,26 @@ namespace AD.FunctionalExtensions
 
 
         public override bool Equals(object obj) =>
-            obj is Option<TValue> && Equals((Option<TValue>)obj);
+            obj is Option<TValue> other && Equals(other);
 
         public bool Equals(Option<TValue> other) =>
             Equals(other, EqualityComparer<TValue>.Default);
 
         bool IStructuralEquatable.Equals(object other, IEqualityComparer comparer) =>
-            other is Option<TValue> && Equals((Option<TValue>)other, (x, y) => comparer.Equals(x, y));
+            other is Option<TValue> otherOption && Equals(otherOption, (x, y) => comparer.Equals(x, y));
 
         public bool Equals(Option<TValue> other, IEqualityComparer<TValue> comparer) =>
             Equals(other, comparer.Equals);
 
         bool Equals(Option<TValue> other, Func<TValue, TValue, bool> equals) =>
-            !(isSome || other.isSome) ||
-            isSome && other.isSome && equals(value, other.value);
+            AreBothNone(other) ||
+            AreBothSome(other) && equals(value, other.value);
+
+        bool AreBothNone(Option<TValue> other) =>
+            !(isSome || other.isSome);
+
+        bool AreBothSome(Option<TValue> other) =>
+            isSome && other.isSome;
 
 
         public override int GetHashCode() =>
@@ -59,8 +66,8 @@ namespace AD.FunctionalExtensions
 
         int IComparable.CompareTo(object obj)
         {
-            if (!(obj is Option<TValue>)) throw new ArgumentException();
-            return CompareTo((Option<TValue>)obj);
+            if (!(obj is Option<TValue> other)) throw new ArgumentException();
+            return CompareTo(other);
         }
 
         public int CompareTo(Option<TValue> other) =>
@@ -68,8 +75,8 @@ namespace AD.FunctionalExtensions
 
         int IStructuralComparable.CompareTo(object other, IComparer comparer)
         {
-            if (!(other is Option<TValue>)) throw new ArgumentException();
-            return CompareTo((Option<TValue>)other, (x, y) => comparer.Compare(x, y));
+            if (!(other is Option<TValue> otherOption)) throw new ArgumentException();
+            return CompareTo(otherOption, (x, y) => comparer.Compare(x, y));
         }
 
         public int CompareTo(Option<TValue> other, IComparer<TValue> comparer) =>
@@ -98,6 +105,6 @@ namespace AD.FunctionalExtensions
     {
         public static Option<TValue> None<TValue>() => Option<TValue>.None;
 
-        public static Option<TValue> Some<TValue>(TValue value) => Option<TValue>.Some(value);
+        public static Option<TValue> Some<TValue>([AllowNull]TValue value) => Option<TValue>.Some(value);
     }
 }

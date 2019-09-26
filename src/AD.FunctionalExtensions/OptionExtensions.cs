@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AD.FunctionalExtensions
 {
     public static class OptionExtensions
     {
-        public static Option<T> Some<T>(this T value) => Option.Some(value);
+        public static Option<T> Some<T>([AllowNull]this T value) => Option.Some(value);
 
         public static U Match<T, U>(this Option<T> option, Func<T, U> onIsSome, Func<U> onIsNone)
         {
