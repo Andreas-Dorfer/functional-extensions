@@ -11,11 +11,11 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryType></RepositoryType>
-    <PackageTags>C#, functional-extensions, Option</PackageTags>
+    <PackageTags>C#, functional, functional-extensions, Option</PackageTags>
     <RepositoryUrl>https://github.com/Andreas-Dorfer/functional-extensions</RepositoryUrl>
     <Company />
-    <Version>1.0.2</Version>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <Version>1.0.3</Version>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
   </PropertyGroup>
 
 </Project>
