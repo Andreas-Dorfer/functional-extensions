@@ -2,7 +2,7 @@
 # Functional Extensions for C#
 Some basic F# features for C#.
 ## NuGet Package
-    PM> Install-Package AD.FunctionalExtensions -Version 1.0.3
+    PM> Install-Package AD.FunctionalExtensions -Version 1.0.4
 ## Option
 See [Options](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/options) in the F# docs.
 ```csharp
@@ -27,6 +27,7 @@ if (a.IsSome(out var value))
     Console.WriteLine(value); //1
 }
 ```
+```IsSome``` supports [nullable / non-nullable reference types](https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/nullable-reference-types).
 ### Compare Options
 Option implements ```IEquatable<Option<TValue>>```.
 ```csharp
