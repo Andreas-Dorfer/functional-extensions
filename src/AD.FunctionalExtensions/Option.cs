@@ -21,7 +21,7 @@ namespace AD.FunctionalExtensions
         }
 
 
-        public bool IsSome([MaybeNullWhen(false)]out TValue value)
+        public bool IsSome([NotNullWhen(true), MaybeNullWhen(false)]out TValue value)
         {
             value = this.value;
             return isSome;
