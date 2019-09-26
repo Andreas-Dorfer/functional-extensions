@@ -2,7 +2,7 @@
 # Functional Extensions for C#
 Some basic F# features for C#.
 ## NuGet Package
-    PM> Install-Package AD.FunctionalExtensions -Version 1.0.2
+    PM> Install-Package AD.FunctionalExtensions -Version 1.0.3
 ## Option
 See [Options](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/options) in the F# docs.
 ```csharp
