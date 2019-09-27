@@ -10,19 +10,19 @@ namespace AD.FunctionalExtensions
     {
         public static Option<TValue> None => default;
 
-        public static Option<TValue> Some([AllowNull]TValue value) => new Option<TValue>(value);
+        public static Option<TValue> Some(TValue value) => new Option<TValue>(value);
 
 
         readonly TValue value;
         readonly bool isSome;
 
-        Option([AllowNull]TValue value)
+        Option(TValue value)
         {
             isSome = (this.value = value) is { };
         }
 
 
-        public bool IsSome([NotNullWhen(true), MaybeNullWhen(false)]out TValue value)
+        public bool IsSome([MaybeNullWhen(false)]out TValue value)
         {
             value = this.value;
             return isSome;
@@ -102,15 +102,19 @@ namespace AD.FunctionalExtensions
         public override string ToString() => isSome ? $"Some({value})" : "None";
     }
 
+
     public static class Option
     {
         public static Option<TValue> None<TValue>() where TValue : notnull =>
             Option<TValue>.None;
 
-        public static Option<TValue> Some<TValue>([AllowNull]TValue value) where TValue : notnull =>
+        public static Option<TValue> Some<TValue>(TValue value) where TValue : notnull =>
             Option<TValue>.Some(value);
 
-        public static Option<TValue> Some<TValue>(TValue? value) where TValue : struct =>
-            value is { } some ? Option<TValue>.Some(some) : Option<TValue>.None;
+        public static Option<TValue> Create<TValue>(TValue? value) where TValue : class =>
+            value is { } some ? Some(some) : None<TValue>();
+
+        public static Option<TValue> Create<TValue>(TValue? value) where TValue : struct =>
+            value.HasValue ? Some(value.Value) : None<TValue>();
     }
 }

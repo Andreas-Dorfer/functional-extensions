@@ -159,10 +159,10 @@ namespace AD.FunctionalExtensions.Tests
         public void Map_SomeToNull()
         {
             int? value = rnd.Next();
-            var some = value.Some();
+            var some = value.AsOption();
 
             var actual =
-                some.Map<int, double>(
+                some.MapNullable<int, double>(
                     mapper: v =>
                     {
                         AreEqual(value, v);
@@ -178,7 +178,7 @@ namespace AD.FunctionalExtensions.Tests
             var none = Option<int>.None;
 
             var actual =
-                none.Map<int, double>(
+                none.MapNullable<int, double>(
                     mapper: _ => throw new AssertFailedException("'mapper' must not be called"));
 
             IsTrue(actual.IsNone());

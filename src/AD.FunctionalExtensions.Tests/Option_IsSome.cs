@@ -51,7 +51,7 @@ namespace AD.FunctionalExtensions.Tests
         public void String()
         {
             var value = RandomString();
-            var option = Option.Some(value);
+            var option = Option.Create(value);
 
             if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
 
@@ -61,11 +61,19 @@ namespace AD.FunctionalExtensions.Tests
         [TestMethod]
         public void String_Empty()
         {
-            var option = Option.Some("");
+            var option = Option.Create("");
 
             if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
 
             AreEqual("", optionValue);
+        }
+
+        [TestMethod]
+        public void String_Null()
+        {
+            var option = Option.Create<string>(null);
+
+            IsFalse(option.IsSome(out var _), NoneExpected);
         }
 
         [TestMethod]
@@ -80,7 +88,7 @@ namespace AD.FunctionalExtensions.Tests
         public void Class()
         {
             var value = new TestClass();
-            var option = Option.Some(value);
+            var option = Option.Create(value);
 
             if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
 
@@ -98,16 +106,29 @@ namespace AD.FunctionalExtensions.Tests
         [TestMethod]
         public void Class_Null()
         {
-            var option = Option<TestClass>.Some(null);
+            var option = Option.Create<TestClass>(null);
 
             IsFalse(option.IsSome(out var _), NoneExpected);
+        }
+
+        [TestMethod]
+        public void NullableClass()
+        {
+            var value = new TestClass();
+            TestClass? GetValue() => value;
+
+            var option = Option.Create(GetValue());
+
+            if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
+
+            AreEqual(value, optionValue);
         }
 
         [TestMethod]
         public void NullableInt()
         {
             int? value = rnd.Next();
-            var option = Option.Some(value);
+            var option = Option.Create(value);
 
             if (!option.IsSome(out var optionValue)) Fail(SomeExpected);
 
@@ -118,7 +139,7 @@ namespace AD.FunctionalExtensions.Tests
         public void NullableInt_Null()
         {
             int? x = null;
-            var option = Option.Some(x);
+            var option = Option.Create(x);
 
             IsFalse(option.IsSome(out var _), NoneExpected);
         }
