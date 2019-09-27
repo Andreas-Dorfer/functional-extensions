@@ -20,6 +20,64 @@ namespace AD.FunctionalExtensions.Tests
         }
 
         [TestMethod]
+        public void AsOption_Class()
+        {
+            var value = new TestClass();
+            var a = Option.Some(value);
+            var b = value.Some();
+
+            AreEqual(a, b);
+        }
+        
+        [TestMethod]
+        public void AsOption_NullableClass()
+        {
+            static TestClass? GetValue() => new TestClass();
+
+            var value = GetValue();
+            var a = Option.Create(value);
+            var b = value.AsOption();
+
+            AreEqual(a, b);
+        }
+
+        [TestMethod]
+        public void AsOption_NullableClass_Null()
+        {
+            static TestClass? GetValue() => null;
+
+            var value = GetValue();
+            var a = Option.Create(value);
+            var b = value.AsOption();
+
+            AreEqual(a, b);
+        }
+
+        [TestMethod]
+        public void AsOption_NullableInt()
+        {
+            static int? GetValue() => rnd.Next();
+
+            var value = GetValue();
+            var a = Option.Create(value);
+            var b = value.AsOption();
+
+            AreEqual(a, b);
+        }
+
+        [TestMethod]
+        public void AsOption_NullableInt_Null()
+        {
+            static int? GetValue() => null;
+
+            var value = GetValue();
+            var a = Option.Create(value);
+            var b = value.AsOption();
+
+            AreEqual(a, b);
+        }
+
+        [TestMethod]
         public void Match_IsSome()
         {
             var value = rnd.Next();
@@ -156,9 +214,45 @@ namespace AD.FunctionalExtensions.Tests
         }
 
         [TestMethod]
-        public void Map_SomeToNull()
+        public void Map_None()
         {
-            int? value = rnd.Next();
+            var none = Option<int>.None;
+
+            var actual =
+                none.Map<int, double>(
+                    mapper: _ => throw new AssertFailedException("'mapper' must not be called"));
+
+            IsTrue(actual.IsNone());
+        }
+
+        [TestMethod]
+        public void MapNullable_Some()
+        {
+            static int? GetValue() => rnd.Next();
+            static double? GetMappedValue() => rnd.NextDouble();
+
+            int? value = GetValue();
+            var some = value.AsOption();
+
+            var mappedValue = GetMappedValue();
+
+            var actual =
+                some.MapNullable(
+                    mapper: v =>
+                    {
+                        AreEqual(value, v);
+                        return mappedValue;
+                    });
+
+            AreEqual(mappedValue.AsOption(), actual);
+        }
+
+        [TestMethod]
+        public void MapNullable_SomeToNull()
+        {
+            static int? GetValue() => rnd.Next();
+
+            int? value = GetValue();
             var some = value.AsOption();
 
             var actual =
@@ -173,12 +267,65 @@ namespace AD.FunctionalExtensions.Tests
         }
 
         [TestMethod]
-        public void Map_None()
+        public void MapNullable_None()
         {
             var none = Option<int>.None;
 
             var actual =
                 none.MapNullable<int, double>(
+                    mapper: _ => throw new AssertFailedException("'mapper' must not be called"));
+
+            IsTrue(actual.IsNone());
+        }
+
+        [TestMethod]
+        public void MapNullable_Class_Some()
+        {
+            static int? GetValue() => rnd.Next();
+            static TestClass? GetMappedValue() => new TestClass();
+
+            int? value = GetValue();
+            var some = value.AsOption();
+
+            var mappedValue = GetMappedValue();
+
+            var actual =
+                some.MapNullable(
+                    mapper: v =>
+                    {
+                        AreEqual(value, v);
+                        return mappedValue;
+                    });
+
+            AreEqual(mappedValue.AsOption(), actual);
+        }
+
+        [TestMethod]
+        public void MapNullable_Class_SomeToNull()
+        {
+            static int? GetValue() => rnd.Next();
+
+            int? value = GetValue();
+            var some = value.AsOption();
+
+            var actual =
+                some.MapNullable<int, TestClass>(
+                    mapper: v =>
+                    {
+                        AreEqual(value, v);
+                        return null;
+                    });
+
+            IsTrue(actual.IsNone());
+        }
+
+        [TestMethod]
+        public void MapNullable_Class_None()
+        {
+            var none = Option<int>.None;
+
+            var actual =
+                none.MapNullable<int, TestClass>(
                     mapper: _ => throw new AssertFailedException("'mapper' must not be called"));
 
             IsTrue(actual.IsNone());

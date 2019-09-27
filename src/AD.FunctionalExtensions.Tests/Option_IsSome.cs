@@ -125,6 +125,16 @@ namespace AD.FunctionalExtensions.Tests
         }
 
         [TestMethod]
+        public void NullableClass_Null()
+        {
+            TestClass? GetValue() => null;
+
+            var option = Option.Create(GetValue());
+
+            IsFalse(option.IsSome(out var _), NoneExpected);
+        }
+
+        [TestMethod]
         public void NullableInt()
         {
             int? value = rnd.Next();
@@ -146,10 +156,7 @@ namespace AD.FunctionalExtensions.Tests
 
 
         string RandomString() => Guid.NewGuid().ToString();
-
-        class TestClass
-        { }
-
+        
 
         const string SomeExpected = "Some expected";
         const string NoneExpected = "None expected";
