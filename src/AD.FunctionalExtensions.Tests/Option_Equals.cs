@@ -59,7 +59,7 @@ namespace AD.FunctionalExtensions.Tests
         }
 
 
-        void AreEqual<TValue>(Option<TValue> a, Option<TValue> b)
+        void AreEqual<TValue>(Option<TValue> a, Option<TValue> b) where TValue : notnull
         {
             Assert.AreEqual(a, b);
             Assert.IsTrue(a.Equals(b));
@@ -67,7 +67,7 @@ namespace AD.FunctionalExtensions.Tests
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
         }
 
-        void AreNotEqual<TValue>(Option<TValue> a, Option<TValue> b)
+        void AreNotEqual<TValue>(Option<TValue> a, Option<TValue> b) where TValue : notnull
         {
             Assert.AreNotEqual(a, b);
             Assert.IsFalse(a.Equals(b));

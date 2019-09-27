@@ -162,7 +162,7 @@ namespace AD.FunctionalExtensions.Tests
             var some = value.Some();
 
             var actual =
-                some.Map<int?, double?>(
+                some.Map<int, double>(
                     mapper: v =>
                     {
                         AreEqual(value, v);

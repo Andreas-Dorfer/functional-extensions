@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace AD.FunctionalExtensions
 {
     public struct Option<TValue> : IEquatable<Option<TValue>>, IStructuralEquatable, IComparable<Option<TValue>>, IComparable, IStructuralComparable
+        where TValue : notnull
     {
         public static Option<TValue> None => default;
 
@@ -103,8 +104,13 @@ namespace AD.FunctionalExtensions
 
     public static class Option
     {
-        public static Option<TValue> None<TValue>() => Option<TValue>.None;
+        public static Option<TValue> None<TValue>() where TValue : notnull =>
+            Option<TValue>.None;
 
-        public static Option<TValue> Some<TValue>([AllowNull]TValue value) => Option<TValue>.Some(value);
+        public static Option<TValue> Some<TValue>([AllowNull]TValue value) where TValue : notnull =>
+            Option<TValue>.Some(value);
+
+        public static Option<TValue> Some<TValue>(TValue? value) where TValue : struct =>
+            value is { } some ? Option<TValue>.Some(some) : Option<TValue>.None;
     }
 }

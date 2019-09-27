@@ -115,17 +115,10 @@ namespace AD.FunctionalExtensions.Tests
         }
 
         [TestMethod]
-        public void NullableInt_None()
-        {
-            var option = Option<int?>.None;
-
-            IsFalse(option.IsSome(out var _), NoneExpected);
-        }
-
-        [TestMethod]
         public void NullableInt_Null()
         {
-            var option = Option<int?>.Some(null);
+            int? x = null;
+            var option = Option.Some(x);
 
             IsFalse(option.IsSome(out var _), NoneExpected);
         }
