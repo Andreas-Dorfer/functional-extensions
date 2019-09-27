@@ -13,7 +13,7 @@ var none = Option<int>.None;
 ### No Null
 ```null``` is treated as ```None```.
 ```csharp
-var a = Option.Some<string>(null);
+var a = Option.Create<string>(null);
 
 a.IsSome(); //fale
 a.IsNone(); //true
