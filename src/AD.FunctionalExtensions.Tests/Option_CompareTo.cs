@@ -16,8 +16,12 @@ namespace AD.FunctionalExtensions.Tests
             var b = 2.Some();
 
             IsTrue(a.CompareTo(b) < 0);
+            IsTrue(a < b);
             AreEqual(0, a.CompareTo(a));
+            IsTrue(a <= b);
+            IsTrue(b >= a);
             IsTrue(b.CompareTo(a) > 0);
+            IsTrue(b > a);
         }
 
         [TestMethod]
@@ -27,7 +31,9 @@ namespace AD.FunctionalExtensions.Tests
             var b = rnd.Next().Some();
 
             IsTrue(a.CompareTo(b) < 0);
+            IsTrue(a < b);
             IsTrue(b.CompareTo(a) > 0);
+            IsTrue(b > a);
         }
 
         [TestMethod]
@@ -37,7 +43,9 @@ namespace AD.FunctionalExtensions.Tests
             var b = Option<int>.None;
 
             IsTrue(a.CompareTo(b) > 0);
+            IsTrue(a > b);
             IsTrue(b.CompareTo(a) < 0);
+            IsTrue(b < a);
         }
 
         [TestMethod]
@@ -47,6 +55,8 @@ namespace AD.FunctionalExtensions.Tests
             var b = Option<int>.None;
 
             AreEqual(0, a.CompareTo(b));
+            IsTrue(a <= b);
+            IsTrue(a >= b);
         }
 
         [TestMethod]

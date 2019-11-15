@@ -38,8 +38,12 @@ namespace AD.FunctionalExtensions
         bool IStructuralEquatable.Equals(object other, IEqualityComparer comparer) =>
             other is Option<TValue> otherOption && Equals(otherOption, (x, y) => comparer.Equals(x, y));
 
-        public bool Equals(Option<TValue> other, IEqualityComparer<TValue> comparer) =>
-            Equals(other, comparer.Equals);
+        public bool Equals(Option<TValue> other, IEqualityComparer<TValue> comparer)
+        {
+            if (comparer is null) throw new ArgumentNullException(nameof(comparer));
+            return Equals(other, comparer.Equals);
+        }
+
 
         bool Equals(Option<TValue> other, Func<TValue, TValue, bool> equals) =>
             AreBothNone(other) ||
@@ -58,8 +62,12 @@ namespace AD.FunctionalExtensions
         int IStructuralEquatable.GetHashCode(IEqualityComparer comparer) =>
             GetHashCode(obj => comparer.GetHashCode(obj));
 
-        public int GetHashCode(IEqualityComparer<TValue> comparer) =>
-            GetHashCode(comparer.GetHashCode);
+        public int GetHashCode(IEqualityComparer<TValue> comparer)
+        {
+            if (comparer is null) throw new ArgumentNullException(nameof(comparer));
+
+            return GetHashCode(comparer.GetHashCode);
+        }
 
         int GetHashCode(Func<TValue, int> getHashCode) =>
             isSome ? getHashCode(value) : int.MinValue;
@@ -67,7 +75,7 @@ namespace AD.FunctionalExtensions
 
         int IComparable.CompareTo(object obj)
         {
-            if (!(obj is Option<TValue> other)) throw new ArgumentException();
+            if (!(obj is Option<TValue> other)) throw new ArgumentException(nameof(obj));
             return CompareTo(other);
         }
 
@@ -76,12 +84,16 @@ namespace AD.FunctionalExtensions
 
         int IStructuralComparable.CompareTo(object other, IComparer comparer)
         {
-            if (!(other is Option<TValue> otherOption)) throw new ArgumentException();
+            if (!(other is Option<TValue> otherOption)) throw new ArgumentException(nameof(other));
             return CompareTo(otherOption, (x, y) => comparer.Compare(x, y));
         }
 
-        public int CompareTo(Option<TValue> other, IComparer<TValue> comparer) =>
-            CompareTo(other, comparer.Compare);
+        public int CompareTo(Option<TValue> other, IComparer<TValue> comparer)
+        {
+            if (comparer is null) throw new ArgumentNullException(nameof(comparer));
+
+            return CompareTo(other, comparer.Compare);
+        }
 
         int CompareTo(Option<TValue> other, Func<TValue, TValue, int> compare)
         {
@@ -98,6 +110,18 @@ namespace AD.FunctionalExtensions
 
         public static bool operator !=(Option<TValue> a, Option<TValue> b) =>
             !(a == b);
+
+        public static bool operator <(Option<TValue> a, Option<TValue> b) =>
+            a.CompareTo(b) < 0;
+
+        public static bool operator >(Option<TValue> a, Option<TValue> b) =>
+            a.CompareTo(b) > 0;
+
+        public static bool operator <=(Option<TValue> a, Option<TValue> b) =>
+            a.CompareTo(b) <= 0;
+
+        public static bool operator >=(Option<TValue> a, Option<TValue> b) =>
+            a.CompareTo(b) >= 0;
 
         public override string ToString() => isSome ? $"Some({value})" : "None";
     }
