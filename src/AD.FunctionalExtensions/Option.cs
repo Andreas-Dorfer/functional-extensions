@@ -41,6 +41,7 @@ namespace AD.FunctionalExtensions
         public bool Equals(Option<TValue> other, IEqualityComparer<TValue> comparer)
         {
             if (comparer is null) throw new ArgumentNullException(nameof(comparer));
+
             return Equals(other, comparer.Equals);
         }
 
@@ -76,6 +77,7 @@ namespace AD.FunctionalExtensions
         int IComparable.CompareTo(object obj)
         {
             if (!(obj is Option<TValue> other)) throw new ArgumentException(nameof(obj));
+
             return CompareTo(other);
         }
 
@@ -85,6 +87,7 @@ namespace AD.FunctionalExtensions
         int IStructuralComparable.CompareTo(object other, IComparer comparer)
         {
             if (!(other is Option<TValue> otherOption)) throw new ArgumentException(nameof(other));
+
             return CompareTo(otherOption, (x, y) => comparer.Compare(x, y));
         }
 
