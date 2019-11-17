@@ -13,8 +13,8 @@ namespace AD.FunctionalExtensions
         public static Option<TValue> Some(TValue value) => new Option<TValue>(value);
 
 
-        readonly TValue value;
         readonly bool isSome;
+        readonly TValue value;
 
         Option(TValue value)
         {
