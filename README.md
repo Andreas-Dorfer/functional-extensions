@@ -2,7 +2,7 @@
 # Functional Extensions for C#
 Some basic F# features for C#. The package fully supports C# 8.0 [nullable / non-nullable reference types](https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/nullable-reference-types).
 ## NuGet Package
-    PM> Install-Package AD.FunctionalExtensions -Version 2.0.0
+    PM> Install-Package AD.FunctionalExtensions -Version 2.1.0
 ## Option
 See [Options](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/options) in the F# docs.
 ```csharp
