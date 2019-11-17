@@ -28,7 +28,7 @@ namespace AD.FunctionalExtensions.Tests
 
             AreEqual(a, b);
         }
-        
+
         [TestMethod]
         public void AsOption_NullableClass()
         {
@@ -329,6 +329,56 @@ namespace AD.FunctionalExtensions.Tests
                     mapper: _ => throw new AssertFailedException("'mapper' must not be called"));
 
             IsTrue(actual.IsNone());
+        }
+
+        [TestMethod]
+        public void DefaultValue_Some()
+        {
+            var some = 3.Some();
+
+            var value = some.DefaultValue(5);
+
+            AreEqual(3, value);
+        }
+
+        [TestMethod]
+        public void DefaultValue_None()
+        {
+            var some = Option<int>.None;
+
+            var value = some.DefaultValue(5);
+
+            AreEqual(5, value);
+        }
+
+        [TestMethod]
+        public void Filter_Some_True()
+        {
+            var some = 3.Some();
+
+            var filtered = some.Filter(_ => _ == 3);
+
+            AreEqual(some, filtered);
+        }
+
+        [TestMethod]
+        public void Filter_Some_False()
+        {
+            var some = 3.Some();
+
+            var filtered = some.Filter(_ => _ != 3);
+
+            IsTrue(filtered.IsNone());
+        }
+
+        [TestMethod]
+        public void Filter_None()
+        {
+            var none = Option<int>.None;
+
+            var filtered = none.Filter(_ => true);
+
+            IsTrue(filtered.IsNone());
         }
     }
 }

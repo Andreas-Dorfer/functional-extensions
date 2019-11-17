@@ -61,5 +61,14 @@ namespace AD.FunctionalExtensions
             return option.Bind(
                 value => mapper(value).AsOption());
         }
+
+        public static T DefaultValue<T>(this Option<T> option, T defaultValue) where T : notnull =>
+            option.Match(
+                onIsSome: value => value,
+                onIsNone: () => defaultValue);
+
+        public static Option<T> Filter<T>(this Option<T> option, Predicate<T> predicate) where T : notnull =>
+            option.Bind(
+                value => predicate(value) ? value.Some() : Option<T>.None);
     }
 }

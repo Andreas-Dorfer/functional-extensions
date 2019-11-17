@@ -5,3 +5,6 @@ dotnet_diagnostic.CA1707.severity = none
 
 # CA1720: Identifier contains type name
 dotnet_diagnostic.CA1720.severity = none
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = none
