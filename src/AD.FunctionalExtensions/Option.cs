@@ -18,7 +18,8 @@ namespace AD.FunctionalExtensions
 
         Option(TValue value)
         {
-            isSome = (this.value = value) is { };
+            this.value = value;
+            isSome = value is { };
         }
 
 
