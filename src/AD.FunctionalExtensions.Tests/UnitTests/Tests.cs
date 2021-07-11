@@ -10,7 +10,7 @@ namespace AD.FunctionalExtensions.Tests.UnitTests
         {
             Unit a = default;
             Unit b = new();
-            Unit c = Unit.Value;
+            var c = Unit.Value;
 
             AssertAreEqual(a, b);
             AssertAreEqual(b, c);
