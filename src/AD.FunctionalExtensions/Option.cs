@@ -10,7 +10,7 @@ namespace AD.FunctionalExtensions
     {
         public static Option<TValue> None => default;
 
-        public static Option<TValue> Some(TValue value) => new Option<TValue>(value);
+        public static Option<TValue> Some(TValue value) => new(value);
 
 
         readonly bool isSome;
@@ -30,13 +30,13 @@ namespace AD.FunctionalExtensions
         }
 
 
-        public override bool Equals(object obj) =>
+        public override bool Equals(object? obj) =>
             obj is Option<TValue> other && Equals(other);
 
         public bool Equals(Option<TValue> other) =>
             Equals(other, EqualityComparer<TValue>.Default);
 
-        bool IStructuralEquatable.Equals(object other, IEqualityComparer comparer) =>
+        bool IStructuralEquatable.Equals(object? other, IEqualityComparer comparer) =>
             other is Option<TValue> otherOption && Equals(otherOption, (x, y) => comparer.Equals(x, y));
 
         public bool Equals(Option<TValue> other, IEqualityComparer<TValue> comparer)
@@ -75,9 +75,9 @@ namespace AD.FunctionalExtensions
             isSome ? getHashCode(value) : int.MinValue;
 
 
-        int IComparable.CompareTo(object obj)
+        int IComparable.CompareTo(object? obj)
         {
-            if (!(obj is Option<TValue> other)) throw new ArgumentException(nameof(obj));
+            if (obj is not Option<TValue> other) throw new ArgumentException(nameof(obj));
 
             return CompareTo(other);
         }
@@ -85,9 +85,9 @@ namespace AD.FunctionalExtensions
         public int CompareTo(Option<TValue> other) =>
             CompareTo(other, Comparer<TValue>.Default);
 
-        int IStructuralComparable.CompareTo(object other, IComparer comparer)
+        int IStructuralComparable.CompareTo(object? other, IComparer comparer)
         {
-            if (!(other is Option<TValue> otherOption)) throw new ArgumentException(nameof(other));
+            if (other is not Option<TValue> otherOption) throw new ArgumentException(nameof(other));
 
             return CompareTo(otherOption, (x, y) => comparer.Compare(x, y));
         }

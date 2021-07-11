@@ -10,7 +10,7 @@ namespace AD.FunctionalExtensions.Tests
     [TestClass]
     public class Option_IStructuralEquatable
     {
-        static readonly Random rnd = new Random();
+        static readonly Random rnd = new();
 
         [TestMethod]
         public void Equals_True()

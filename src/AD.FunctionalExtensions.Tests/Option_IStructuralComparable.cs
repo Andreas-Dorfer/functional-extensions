@@ -10,7 +10,7 @@ namespace AD.FunctionalExtensions.Tests
     [TestClass]
     public class Option_IStructuralComparable
     {
-        static readonly Random rnd = new Random();
+        static readonly Random rnd = new();
 
         [TestMethod]
         public void Compare()

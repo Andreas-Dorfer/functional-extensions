@@ -6,7 +6,7 @@ namespace AD.FunctionalExtensions.Tests
     [TestClass]
     public class Option_Equals
     {
-        static readonly Random rnd = new Random();
+        static readonly Random rnd = new();
 
         [TestMethod]
         public void Equal()

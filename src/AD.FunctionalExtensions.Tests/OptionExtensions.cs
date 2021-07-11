@@ -7,7 +7,7 @@ namespace AD.FunctionalExtensions.Tests
     [TestClass]
     public class OptionExtensions
     {
-        static readonly Random rnd = new Random();
+        static readonly Random rnd = new();
 
         [TestMethod]
         public void Some()
@@ -32,7 +32,7 @@ namespace AD.FunctionalExtensions.Tests
         [TestMethod]
         public void AsOption_NullableClass()
         {
-            static TestClass? GetValue() => new TestClass();
+            static TestClass? GetValue() => new();
 
             var value = GetValue();
             var a = Option.Create(value);
@@ -282,7 +282,7 @@ namespace AD.FunctionalExtensions.Tests
         public void MapNullable_Class_Some()
         {
             static int? GetValue() => rnd.Next();
-            static TestClass? GetMappedValue() => new TestClass();
+            static TestClass? GetMappedValue() => new();
 
             int? value = GetValue();
             var some = value.AsOption();

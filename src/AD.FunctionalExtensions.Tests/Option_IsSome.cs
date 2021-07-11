@@ -7,7 +7,7 @@ namespace AD.FunctionalExtensions.Tests
     [TestClass]
     public class Option_IsSome
     {
-        static readonly Random rnd = new Random();
+        static readonly Random rnd = new();
 
         [TestMethod]
         public void Int()
@@ -127,7 +127,7 @@ namespace AD.FunctionalExtensions.Tests
         [TestMethod]
         public void NullableClass_Null()
         {
-            TestClass? GetValue() => null;
+            static TestClass? GetValue() => null;
 
             var option = Option.Create(GetValue());
 
