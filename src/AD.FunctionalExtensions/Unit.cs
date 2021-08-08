@@ -2,9 +2,7 @@
 {
     public readonly struct Unit
     {
-        static readonly Unit value = default;
-
-        public static ref readonly Unit Value => ref value;
+        public static Unit Value => default;
 
         public override int GetHashCode() => 0;
 

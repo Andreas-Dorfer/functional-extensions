@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace AD.FunctionalExtensions
 {
-    public struct Option<TValue> : IEquatable<Option<TValue>>, IStructuralEquatable, IComparable<Option<TValue>>, IComparable, IStructuralComparable
+    public readonly struct Option<TValue> : IEquatable<Option<TValue>>, IStructuralEquatable, IComparable<Option<TValue>>, IComparable, IStructuralComparable
         where TValue : notnull
     {
         public static Option<TValue> None => default;
